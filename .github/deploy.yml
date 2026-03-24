@@ -1,0 +1,26 @@
+name: Deploy VuePress
+on:
+  push:
+    branches: [main] # or master
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vuepress/dist # Check if your build goes here
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
